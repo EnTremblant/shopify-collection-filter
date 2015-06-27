@@ -1,0 +1,145 @@
+{{ 'collection_filter.css' | asset_url | stylesheet_tag }}
+<script>
+  var brandList = {};
+  var tagList = {};
+  var typeList = {
+    'watches' : 'Watches',
+    'jewelry' : 'Jewelry',
+    'estate-watches' : 'Estate Watches',
+    'jewelry-brands' : 'Jewelry Brands',
+    'gemstone' : 'Gemstone',
+    'gifts' : 'Gifts' 
+  };
+</script>
+<style>
+</style>
+  
+<div>
+        <p class="optionHeading leftMenu" align="center">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPES 
+         <button id="typeListExpander" type="button" class="btn btn-primary btn-sm expand">-</button>
+        </p>
+  
+        <div id="typeListFilter" class=" filter">
+           <div class="checkbox">
+
+              <input type="checkbox"  value="clearSelectedTypes" id="clearSelectedTypes"><label for="clearSelectedTypes" class="content">CLEAR ALL</label>
+            </div>
+        
+          <input type="text" class="leftMenuTextBox form-control"
+                 placeholder="Search Types" id="searchTypes" />
+          <br>
+          		  <div class="options" id="typeList">                 
+                    
+        
+          <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="type" id="watches" value="watches">
+					&nbsp;&nbsp;Watches
+            </label></div>
+                    
+           <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="type" id="jewelry" value="jewelry">
+					&nbsp;&nbsp;Jewelry
+            </label></div>
+                    
+           <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="type" id="estate-watches" value="estate-watches">
+					&nbsp;&nbsp;Estate Watches
+            </label></div> 
+                    
+          <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="type" id="jewelry-brands" value="jewelry-brands">
+					&nbsp;&nbsp;Jewelry Brands
+            </label></div> 
+                    
+          <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="type" id="gemstone" value="gemstone">
+					&nbsp;&nbsp;Gemstone
+            </label></div>
+                    
+           <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="type" id="gifts" value="gifts">
+					&nbsp;&nbsp;Gifts
+            </label></div>         
+                    
+          </div></div>
+</div>
+  <br/>
+<div>
+        <p class="optionHeading leftMenu" align="center">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  BRAND 
+          <button id="brandListExpander" type="button" class="btn btn-primary btn-sm expand">-</button>
+        </p>
+  
+        <div id="brandListFilter" class=" filter">
+                     <div class="checkbox">
+
+              <input type="checkbox"  value="clearSelectedBrands" id="clearSelectedBrands"><label for="clearSelectedBrands" class="content">CLEAR ALL</label>
+            </div>
+        
+          <input type="text" class="leftMenuTextBox form-control"
+                 placeholder="Search Brands" id="searchBrands" />
+          <br>
+          		  <div class="options" id="brandList">
+          {% for product_vendor in collection.all_vendors %}
+        
+          <div class="radio">
+          <label class="content" style="margin-left:1px;">
+            <input type="radio" name="brand" id="{{ product_vendor }}" value="{{ product_vendor  }}">
+					&nbsp;&nbsp;{{ product_vendor }}
+
+            </label></div>
+                    <script>
+                      var link = '{{ product_vendor | link_to_vendor }}';
+                      link = $.parseHTML(link);
+                      link = $(link);
+                      var href = link.attr('href');
+                      window.brandList['{{ product_vendor  }}'] = href;
+                      
+                    </script>
+          {% endfor %}
+          </div></div>
+</div>
+  <br/>
+
+<div>
+        <p class="optionHeading leftMenu" align="center">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TAGS 
+           <button id="tagListExpander" type="button" class="btn btn-primary btn-sm expand">-</button>
+        </p>
+  
+        <div id="tagListFilter" class="filter">
+                     <div class="checkbox">
+
+              <input type="checkbox"  value="clearSelectedTags" id="clearSelectedTags"><label for="clearSelectedTags" class="content">CLEAR ALL</label>
+            </div>
+          <input type="text" class="leftMenuTextBox form-control"
+                 placeholder="Search Tags" id="searchTags" />
+
+          <br>
+		  <div class="options" id="tagList">
+          {% for tag in collection.tags %}
+          <div class="checkbox">
+
+              <input type="checkbox"  value="{{ tag | replace: ' ', '-'}}" id="{{ tag | replace: ' ', '-'}}"><label for="{{ tag | replace: ' ', '-'}}" class="content">{{ tag }}</label>
+            </div>
+               <script>
+                      window.tagList['{{ tag | replace: ' ', '-'}}'] = '{{ tag}}'
+                      
+                    </script>
+          {% endfor %}
+         
+          </div></div>
+
+</div>
+<br/>
+<div>
+  <button type="button" id="applyFilter" class="btn btn-success btn-lg btn-block">Filter</button>
+</div>
+{{ 'collection_filter.js' | asset_url | script_tag }}
